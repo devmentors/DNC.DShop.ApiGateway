@@ -5,6 +5,7 @@ using DShop.Common.Metrics;
 using DShop.Common.Mvc;
 using DShop.Common.Vault;
 using System;
+using Serilog;
 
 namespace DShop.Api
 {
@@ -12,7 +13,18 @@ namespace DShop.Api
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            try
+            { 
+                CreateWebHostBuilder(args).Build().Run();
+            }
+            catch(Exception ex)
+            {
+                Log.Fatal(ex, "Host terminted unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
